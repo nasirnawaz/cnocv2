@@ -4348,6 +4348,7 @@ Runtime-only console for parallel complaint handling, outage alerts, vendor esca
 # ============================================================
 # 22. APPLICATION LAUNCH
 # ============================================================
+app = build_app()
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 7860))
     app.launch(
