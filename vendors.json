@@ -1,0 +1,102 @@
+{
+  "Netsat": [
+    {
+      "Level": "Level 1",
+      "Name": "Netsat Support Desk",
+      "Designation": "Help desk / CNOC Netsat",
+      "Time": "1 Hour",
+      "Phone": "021-111638728",
+      "Email": "support.cmpak@netsat.net.pk"
+    },
+    {
+      "Level": "Level 1",
+      "Name": "Ali Nadeem",
+      "Designation": "Help desk / CNOC Netsat",
+      "Time": "1 Hour",
+      "Phone": "0309 1112422; 0312-2431968",
+      "Email": "ali.nadeem@netsat.net.pk"
+    },
+    {
+      "Level": "Level 2 (Central Region)",
+      "Name": "Zafar Iqbal (CTR)",
+      "Designation": "Regional head (Lahore)",
+      "Time": "3 hours",
+      "Phone": "0301-8114185",
+      "Email": "zafar.iqbal@netsat.net.pk"
+    },
+    {
+      "Level": "Level 2 (Central Region)",
+      "Name": "Shoukat Khan (MTR)",
+      "Designation": "Regional head (Multan)",
+      "Time": "3 hours",
+      "Phone": "0302-8271762",
+      "Email": "shoukat.khan@netsat.net.pk"
+    },
+    {
+      "Level": "Level 2 (South Region)",
+      "Name": "Farhan (Sindh)",
+      "Designation": "Regional head (Sindh)",
+      "Time": "3 hours",
+      "Phone": "0301-8114182",
+      "Email": "m.farhan@netsat.net.pk"
+    },
+    {
+      "Level": "Level 2 (South Region)",
+      "Name": "Syed Yousuf Hussain (Balochistan)",
+      "Designation": "Regional head (Balochistan)",
+      "Time": "3 hours",
+      "Phone": "0300-8259632",
+      "Email": "syed.yousuf@netsat.net.pk"
+    },
+    {
+      "Level": "Level 2 (North Region)",
+      "Name": "Asad Imran (North/KPK)",
+      "Designation": "Regional head (North)",
+      "Time": "3 hours",
+      "Phone": "0311-8814294",
+      "Email": "asad.imran@netsat.net.pk"
+    },
+    {
+      "Level": "Level 3",
+      "Name": "M. Tahir Qureshi",
+      "Designation": "Operational Support",
+      "Time": "6 hours",
+      "Phone": "0300 8232647",
+      "Email": "m.tahir@netsat.net.pk"
+    },
+    {
+      "Level": "Level 3",
+      "Name": "Muhammad Sumair",
+      "Designation": "Operation Head",
+      "Time": "8 hours",
+      "Phone": "0301-8114181",
+      "Email": "sumair@netsat.net.pk"
+    },
+    {
+      "Level": "Level 4",
+      "Name": "Syed Mubashir Imam",
+      "Designation": "Senior Operational Head",
+      "Time": "12 hours",
+      "Phone": "0301-8292632",
+      "Email": "mubashir.imam@netsat.net.pk"
+    },
+    {
+      "Level": "Level 5",
+      "Name": "Kamran Qaiser",
+      "Designation": "HOD Wireless",
+      "Time": "Urgent/Emergency Maintenance",
+      "Phone": "0301 8114177",
+      "Email": "kamran.qaiser@netsat.net.pk"
+    }
+  ],
+  "wateen": [
+    {
+      "Level": "Level 1",
+      "Name": "ali",
+      "Designation": "ali",
+      "Time": "1 hour",
+      "Phone": "03002922584",
+      "Email": "ali@wateen.com"
+    }
+  ]
+}
