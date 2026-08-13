@@ -2405,7 +2405,7 @@ def load_and_clean_data(file_path):
 
 
 def process_outage_file(file_obj):
-    """Processes uploaded CSV/Excel alarm dump files."""
+    """Processes uploaded CSV/Excel alarm dump files and generates BOTH full & simple excel reports."""
     if file_obj is None:
         return "⚠️ Please upload an Excel or CSV file.", None, None, get_history_table(), generate_handover_summary()
 
@@ -2491,7 +2491,7 @@ def process_outage_file(file_obj):
             "occurred_time": outlook_time,
         })
 
-        # Setup Timestamps for Export Files
+        # File Timestamp Setup
         file_time = valid_times.iloc[0].strftime("%Y-%m-%d_%I-%M_%p") if not valid_times.empty else datetime.now().strftime("%Y-%m-%d_%I-%M_%p")
         temp_dir = tempfile.gettempdir()
 
@@ -2562,12 +2562,10 @@ def process_outage_file(file_obj):
         ws_simple.column_dimensions['A'].width = 80
         wb_simple.save(simple_filepath)
 
-        # Returns 5 outputs now instead of 4
         return console_output, out_filepath, simple_filepath, get_history_table(), generate_handover_summary()
 
     except Exception as e:
         return f"❌ Processing Error: {str(e)}", None, None, get_history_table(), generate_handover_summary()
-
 
 
 def get_history_table():
@@ -3220,7 +3218,7 @@ Runtime-only console for parallel complaint handling, outage alerts, vendor esca
                     label="Queued + Open Complaints",
                 )
 
-# TAB 2: OUTAGE ANALYZER
+            # TAB 2: OUTAGE ANALYZER
             with gr.Tab("📈 Outage Analyzer"):
                 gr.Markdown("### 📊 NOC Alarm & Outage Link Analyzer")
                 with gr.Row():
@@ -3232,7 +3230,7 @@ Runtime-only console for parallel complaint handling, outage alerts, vendor esca
                         analyze_button = gr.Button("⚡ Analyze Outage File", variant="primary")
                     with gr.Column():
                         output_file = gr.File(label="📥 Download Categorized Excel Report")
-                        simple_links_file = gr.File(label="📄 Download Simple Outage Links Only") # <-- NEW DOWNLOAD BUTTON
+                        simple_links_file = gr.File(label="📄 Download Simple Outage Links Only")
 
                 console_output = gr.Textbox(
                     label="📋 Outlook Ready Summary & Thread Output",
@@ -3263,7 +3261,6 @@ Runtime-only console for parallel complaint handling, outage alerts, vendor esca
                     interactive=False,
                 )
 
-                # Connect the button to 5 output targets
                 analyze_button.click(
                     fn=process_outage_file,
                     inputs=file_input,
