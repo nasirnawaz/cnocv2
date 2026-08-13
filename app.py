@@ -2546,7 +2546,7 @@ def process_outage_file(file_obj):
         # =========================================================
         # 2. SIMPLE OUTAGE LINKS EXCEL FILE (Single "Links" Column)
         # =========================================================
-        simple_filepath = os.path.join(temp_dir, f"Outage_Raw_Links_{file_time}.xlsx")
+        simple_filepath = os.path.join(temp_dir, f"Sample Links.xlsx")
         wb_simple = Workbook()
         ws_simple = wb_simple.active
         ws_simple.title = "Outage Links"
