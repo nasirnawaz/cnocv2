@@ -2407,7 +2407,7 @@ def load_and_clean_data(file_path):
 def process_outage_file(file_obj):
     """Processes uploaded CSV/Excel alarm dump files."""
     if file_obj is None:
-        return "⚠️ Please upload an Excel or CSV file.", None, get_history_table(), generate_handover_summary()
+        return "⚠️ Please upload an Excel or CSV file.", None, None, get_history_table(), generate_handover_summary()
 
     file_path = file_obj.name
     try:
@@ -2415,7 +2415,7 @@ def process_outage_file(file_obj):
         df.columns = [str(c).strip() for c in df.columns]
 
         if "Location Info" not in df.columns or "Last Occurred (ST)" not in df.columns:
-            return "❌ Error: 'Location Info' or 'Last Occurred (ST)' column not found.", None, get_history_table(), generate_handover_summary()
+            return "❌ Error: 'Location Info' or 'Last Occurred (ST)' column not found.", None, None, get_history_table(), generate_handover_summary()
 
         processed = []
         for _, row in df.iterrows():
@@ -2434,7 +2434,7 @@ def process_outage_file(file_obj):
             })
 
         if not processed:
-            return "❌ No valid ESS service records found in file.", None, get_history_table(), generate_handover_summary()
+            return "❌ No valid ESS service records found in file.", None, None, get_history_table(), generate_handover_summary()
 
         df_unsorted = pd.DataFrame(processed).drop_duplicates(subset=["Service"], keep="first").reset_index(drop=True)
         df_sorted = df_unsorted.sort_values(by="Numeric_BW", ascending=False).reset_index(drop=True)
@@ -2491,11 +2491,14 @@ def process_outage_file(file_obj):
             "occurred_time": outlook_time,
         })
 
-        # Generate Excel File Output
+        # Setup Timestamps for Export Files
         file_time = valid_times.iloc[0].strftime("%Y-%m-%d_%I-%M_%p") if not valid_times.empty else datetime.now().strftime("%Y-%m-%d_%I-%M_%p")
         temp_dir = tempfile.gettempdir()
-        out_filepath = os.path.join(temp_dir, f"Outage_Links_{file_time}.xlsx")
 
+        # =========================================================
+        # 1. FULL CATEGORIZED EXCEL REPORT
+        # =========================================================
+        out_filepath = os.path.join(temp_dir, f"Outage_Links_{file_time}.xlsx")
         wb = Workbook()
         ws = wb.active
         ws.title = "Categorized Links"
@@ -2539,10 +2542,32 @@ def process_outage_file(file_obj):
             ws.column_dimensions[ws.cell(row=1, column=col_idx).column_letter].width = width
 
         wb.save(out_filepath)
-        return console_output, out_filepath, get_history_table(), generate_handover_summary()
+
+        # =========================================================
+        # 2. SIMPLE OUTAGE LINKS EXCEL FILE (Single "Links" Column)
+        # =========================================================
+        simple_filepath = os.path.join(temp_dir, f"Outage_Raw_Links_{file_time}.xlsx")
+        wb_simple = Workbook()
+        ws_simple = wb_simple.active
+        ws_simple.title = "Outage Links"
+
+        # Header
+        ws_simple.append(["Links"])
+        ws_simple.cell(row=1, column=1).font = Font(bold=True)
+
+        # Raw links list
+        for _, r in df_unsorted.iterrows():
+            ws_simple.append([r["Service"]])
+
+        ws_simple.column_dimensions['A'].width = 80
+        wb_simple.save(simple_filepath)
+
+        # Returns 5 outputs now instead of 4
+        return console_output, out_filepath, simple_filepath, get_history_table(), generate_handover_summary()
 
     except Exception as e:
-        return f"❌ Processing Error: {str(e)}", None, get_history_table(), generate_handover_summary()
+        return f"❌ Processing Error: {str(e)}", None, None, get_history_table(), generate_handover_summary()
+
 
 
 def get_history_table():
@@ -3195,7 +3220,7 @@ Runtime-only console for parallel complaint handling, outage alerts, vendor esca
                     label="Queued + Open Complaints",
                 )
 
-            # TAB 2: OUTAGE ANALYZER
+# TAB 2: OUTAGE ANALYZER
             with gr.Tab("📈 Outage Analyzer"):
                 gr.Markdown("### 📊 NOC Alarm & Outage Link Analyzer")
                 with gr.Row():
@@ -3207,6 +3232,7 @@ Runtime-only console for parallel complaint handling, outage alerts, vendor esca
                         analyze_button = gr.Button("⚡ Analyze Outage File", variant="primary")
                     with gr.Column():
                         output_file = gr.File(label="📥 Download Categorized Excel Report")
+                        simple_links_file = gr.File(label="📄 Download Simple Outage Links Only") # <-- NEW DOWNLOAD BUTTON
 
                 console_output = gr.Textbox(
                     label="📋 Outlook Ready Summary & Thread Output",
@@ -3237,10 +3263,11 @@ Runtime-only console for parallel complaint handling, outage alerts, vendor esca
                     interactive=False,
                 )
 
+                # Connect the button to 5 output targets
                 analyze_button.click(
                     fn=process_outage_file,
                     inputs=file_input,
-                    outputs=[console_output, output_file, history_table, handover_text],
+                    outputs=[console_output, output_file, simple_links_file, history_table, handover_text],
                 )
 
                 clear_history_btn.click(
