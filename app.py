@@ -5997,17 +5997,7 @@ Runtime-only console for parallel complaint handling, vendor escalations, troubl
 
 
 
-# ============================================================
-# 15. APPLICATION LAUNCH
-# ============================================================
 app = build_app()
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 7860))
-    app.launch(
-        server_name="0.0.0.0",
-        server_port=port,
-        auth=[
-            ("nasir", "123"),
-        ],
-        auth_message="🔒 Corporate NOC Response Console - Authorized Personnel Only"
-    )
+    app.launch(server_name="0.0.0.0", server_port=port, share=False)
